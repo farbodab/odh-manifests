@@ -1,0 +1,23 @@
+- op: replace
+  path: /data/jupyterhub_config.py
+  value: |
+    def pvc_mounts(spawner,pod):
+      # Apply profile from singleuser-profiles
+      apply_pod_profile(spawner, pod)
+
+      # Mount LMod volume
+      pod.spec.volumes.append(dict(name='lmod-modulefiles',persistentVolumeClaim=dict(claimName='jupyterhub-lmod-modulefiles')))
+      pod.spec.containers[0].volume_mounts.append(dict(name='lmod-modulefiles',mountPath='/opt/apps/lmod/lmod/modulefiles',readOnly=True))
+
+      # Function modify_pod_hook must return the pod instance
+      return pod
+ 
+    c.OpenShiftSpawner.modify_pod_hook = pvc_mounts
+  
+- op: replace
+  path: /data/jupyterhub_admins
+  value: "$(jupyterhub_admins)"
+
+- op: replace
+  path: /data/singleuser_pvc_size
+  value: "$(singleuser_pvc_size)"
