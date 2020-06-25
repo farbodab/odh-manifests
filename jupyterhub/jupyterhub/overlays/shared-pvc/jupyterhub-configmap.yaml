@@ -44,7 +44,7 @@
      
       if spawner.user.name in ccso_users:
         pod.spec.volumes.append(dict(name='data-ccso',persistentVolumeClaim=dict(claimName='jupyterhub-shared-data-secret-ccso')))
-        pod.spec.containers[0].volume_mounts.append(dict(name='data-ccso',mountPath='/opt/app-root/src/shared-data/ccso',readOnly=readOnly_flag))
+        pod.spec.containers[0].volume_mounts.append(dict(name='data-ccso',mountPath='/opt/app-root/src/shared-data/secret/ccso',readOnly=readOnly_flag))
 
       # Function modify_pod_hook must return the pod instance
       return pod
