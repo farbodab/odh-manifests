@@ -25,7 +25,7 @@
 
       # Public data (no membership test)
       pod.spec.volumes.append(dict(name='public',persistentVolumeClaim=dict(claimName='hmf-data-public')))
-      pod.spec.containers[0].volume_mounts.append(dict(name='data-public',mountPath='/opt/app-root/src/data/public',readOnly=readOnly_flag))
+      pod.spec.containers[0].volume_mounts.append(dict(name='public',mountPath='/opt/app-root/src/data/public',readOnly=readOnly_flag))
 
       # Public notebooks (no membership test)
       pod.spec.volumes.append(dict(name='notebooks-public',persistentVolumeClaim=dict(claimName='jupyterhub-shared-notebooks-public')))
