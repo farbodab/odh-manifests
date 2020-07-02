@@ -11,7 +11,7 @@
       secret_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','secret_users')
       iphis_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','iphis_users')
       ccso_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','ccso_users')
-      
+
 
       # Set R/W mode only for admins
       admins=spawner.single_user_profiles.read_config_map('jupyterhub-groups','admins')
@@ -22,6 +22,10 @@
       # Public data (no membership test)
       pod.spec.volumes.append(dict(name='data-public',persistentVolumeClaim=dict(claimName='jupyterhub-shared-data-public')))
       pod.spec.containers[0].volume_mounts.append(dict(name='data-public',mountPath='/opt/app-root/src/shared-data/public',readOnly=readOnly_flag))
+
+      # Public data (no membership test)
+      pod.spec.volumes.append(dict(name='public',persistentVolumeClaim=dict(claimName='hmf-data-public')))
+      pod.spec.containers[0].volume_mounts.append(dict(name='data-public',mountPath='/opt/app-root/src/data/public',readOnly=readOnly_flag))
 
       # Public notebooks (no membership test)
       pod.spec.volumes.append(dict(name='notebooks-public',persistentVolumeClaim=dict(claimName='jupyterhub-shared-notebooks-public')))
@@ -41,16 +45,16 @@
       if spawner.user.name in iphis_users:
         pod.spec.volumes.append(dict(name='data-iphis',persistentVolumeClaim=dict(claimName='jupyterhub-shared-data-secret-iphis')))
         pod.spec.containers[0].volume_mounts.append(dict(name='data-iphis',mountPath='/opt/app-root/src/shared-data/secret/iphis',readOnly=readOnly_flag))
-     
+
       if spawner.user.name in ccso_users:
         pod.spec.volumes.append(dict(name='data-ccso',persistentVolumeClaim=dict(claimName='jupyterhub-shared-data-secret-ccso')))
         pod.spec.containers[0].volume_mounts.append(dict(name='data-ccso',mountPath='/opt/app-root/src/shared-data/secret/ccso',readOnly=readOnly_flag))
 
       # Function modify_pod_hook must return the pod instance
       return pod
- 
+
     c.OpenShiftSpawner.modify_pod_hook = pvc_mounts
-  
+
 - op: replace
   path: /data/jupyterhub_admins
   value: "$(jupyterhub_admins)"
