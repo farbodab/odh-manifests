@@ -7,8 +7,6 @@
 
       # Get private_users and secret_users lists, plus admins for R/W access
       private_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','private_users')
-      private_notebook_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','private_notebook_users')
-      secret_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','secret_users')
       iphis_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','iphis_users')
       ccso_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','ccso_users')
 
@@ -20,21 +18,8 @@
       # Mount volumes according to membership
 
       # Public data (no membership test)
-      pod.spec.volumes.append(dict(name='data-public',persistentVolumeClaim=dict(claimName='jupyterhub-shared-data-public')))
-      pod.spec.containers[0].volume_mounts.append(dict(name='data-public',mountPath='/opt/app-root/src/shared-data/public',readOnly=readOnly_flag))
-
-      # Public data (no membership test)
       pod.spec.volumes.append(dict(name='hmf-data-public',persistentVolumeClaim=dict(claimName='hmf-data-public')))
       pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-public',mountPath='/opt/app-root/src/data/public',readOnly=readOnly_flag))
-
-      # Public notebooks (no membership test)
-      pod.spec.volumes.append(dict(name='notebooks-public',persistentVolumeClaim=dict(claimName='jupyterhub-shared-notebooks-public')))
-      pod.spec.containers[0].volume_mounts.append(dict(name='notebooks-public',mountPath='/opt/app-root/src/shared-notebooks',readOnly=False))
-
-      # Private notebooks
-      if spawner.user.name in private_notebook_users:
-        pod.spec.volumes.append(dict(name='notebooks-private',persistentVolumeClaim=dict(claimName='jupyterhub-shared-notebooks-private')))
-        pod.spec.containers[0].volume_mounts.append(dict(name='notebooks-private',mountPath='/opt/app-root/src/shared-nb-private',readOnly=False))
 
       # Private data
       if spawner.user.name in private_users:
@@ -43,12 +28,18 @@
 
       # Secret data
       if spawner.user.name in iphis_users:
-        pod.spec.volumes.append(dict(name='hmf-data-restricted-moh',persistentVolumeClaim=dict(claimName='hmf-data-restricted-moh')))
-        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-restricted-moh',mountPath='/opt/app-root/src/data/restricted/raw/moh',readOnly=readOnly_flag))
+        pod.spec.volumes.append(dict(name='hmf-data-restricted-raw-moh',persistentVolumeClaim=dict(claimName='hmf-data-restricted-raw-moh')))
+        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-restricted-raw-moh',mountPath='/opt/app-root/src/data/restricted/raw/moh',readOnly=readOnly_flag))
+
+        pod.spec.volumes.append(dict(name='hmf-data-restricted-processed-moh',persistentVolumeClaim=dict(claimName='hmf-data-processed-raw-moh')))
+        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-processed-restricted-raw-moh',mountPath='/opt/app-root/src/data/restricted/processed/moh',readOnly=readOnly_flag))
 
       if spawner.user.name in ccso_users:
-        pod.spec.volumes.append(dict(name='hmf-data-restricted-ccso',persistentVolumeClaim=dict(claimName='hmf-data-restricted-ccso')))
-        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-restricted-ccso',mountPath='/opt/app-root/src/data/restricted/raw/ccso',readOnly=readOnly_flag))
+        pod.spec.volumes.append(dict(name='hmf-data-restricted-raw-ccso',persistentVolumeClaim=dict(claimName='hmf-data-restricted-raw-ccso')))
+        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-restricted-raw-ccso',mountPath='/opt/app-root/src/data/restricted/raw/ccso',readOnly=readOnly_flag))
+
+        pod.spec.volumes.append(dict(name='hmf-data-restricted-processed-ccso',persistentVolumeClaim=dict(claimName='hmf-data-restricted-processed-ccso')))
+        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-restricted-processed-ccso',mountPath='/opt/app-root/src/data/restricted/processed/ccso',readOnly=readOnly_flag))
 
       # Function modify_pod_hook must return the pod instance
       return pod
