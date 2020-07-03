@@ -31,7 +31,7 @@
         pod.spec.volumes.append(dict(name='hmf-data-restricted-raw-moh',persistentVolumeClaim=dict(claimName='hmf-data-restricted-raw-moh')))
         pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-restricted-raw-moh',mountPath='/opt/app-root/src/data/restricted/raw/moh',readOnly=readOnly_flag))
 
-        pod.spec.volumes.append(dict(name='hmf-data-restricted-processed-moh',persistentVolumeClaim=dict(claimName='hmf-data-processed-raw-moh')))
+        pod.spec.volumes.append(dict(name='hmf-data-restricted-processed-moh',persistentVolumeClaim=dict(claimName='hmf-data-restricted-processed-moh')))
         pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-restricted-processed-moh',mountPath='/opt/app-root/src/data/restricted/processed/moh',readOnly=readOnly_flag))
 
       if spawner.user.name in ccso_users:
