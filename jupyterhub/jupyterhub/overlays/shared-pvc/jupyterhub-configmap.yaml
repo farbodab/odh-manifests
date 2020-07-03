@@ -38,8 +38,8 @@
 
       # Private data
       if spawner.user.name in private_users:
-        pod.spec.volumes.append(dict(name='data-private',persistentVolumeClaim=dict(claimName='jupyterhub-shared-data-private')))
-        pod.spec.containers[0].volume_mounts.append(dict(name='data-private',mountPath='/opt/app-root/src/shared-data/private',readOnly=readOnly_flag))
+        pod.spec.volumes.append(dict(name='hmf-data-confidential',persistentVolumeClaim=dict(claimName='hmf-data-confidential')))
+        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-confidential',mountPath='/opt/app-root/src/data/restricted/confidential',readOnly=readOnly_flag))
 
       # Secret data
       if spawner.user.name in iphis_users:
