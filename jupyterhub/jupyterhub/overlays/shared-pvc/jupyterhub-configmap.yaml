@@ -43,12 +43,12 @@
 
       # Secret data
       if spawner.user.name in iphis_users:
-        pod.spec.volumes.append(dict(name='data-iphis',persistentVolumeClaim=dict(claimName='jupyterhub-shared-data-secret-iphis')))
-        pod.spec.containers[0].volume_mounts.append(dict(name='data-iphis',mountPath='/opt/app-root/src/shared-data/secret/iphis',readOnly=readOnly_flag))
+        pod.spec.volumes.append(dict(name='hmf-data-restricted-moh',persistentVolumeClaim=dict(claimName='hmf-data-restricted-moh')))
+        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-restricted-moh',mountPath='/opt/app-root/src/data/restricted/raw/moh',readOnly=readOnly_flag))
 
       if spawner.user.name in ccso_users:
-        pod.spec.volumes.append(dict(name='data-ccso',persistentVolumeClaim=dict(claimName='jupyterhub-shared-data-secret-ccso')))
-        pod.spec.containers[0].volume_mounts.append(dict(name='data-ccso',mountPath='/opt/app-root/src/shared-data/secret/ccso',readOnly=readOnly_flag))
+        pod.spec.volumes.append(dict(name='hmf-data-restricted-ccso',persistentVolumeClaim=dict(claimName='hmf-data-restricted-ccso')))
+        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-restricted-ccso',mountPath='/opt/app-root/src/data/restricted/raw/ccso',readOnly=readOnly_flag))
 
       # Function modify_pod_hook must return the pod instance
       return pod
