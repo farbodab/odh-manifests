@@ -12,6 +12,8 @@
 
       #Get Project Users
       projects_thp_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','projects-thp')
+      projects_analytics_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','projects-analytics')
+
 
 
 
@@ -49,6 +51,9 @@
         pod.spec.volumes.append(dict(name='hmf-projects-thp',persistentVolumeClaim=dict(claimName='hmf-projects-thp')))
         pod.spec.containers[0].volume_mounts.append(dict(name='hmf-projects-thp',mountPath='/opt/app-root/src/projects/thp',readOnly=False))
 
+      if spawner.user.name in projects_analytics_users:
+        pod.spec.volumes.append(dict(name='hmf-projects-analytics',persistentVolumeClaim=dict(claimName='hmf-projects-analytics')))
+        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-projects-analytics',mountPath='/opt/app-root/src/projects/analytics',readOnly=False))
 
 
       # Function modify_pod_hook must return the pod instance
