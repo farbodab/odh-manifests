@@ -10,6 +10,10 @@
       iphis_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','iphis_users')
       ccso_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','ccso_users')
 
+      #Get Project Users
+      projects_thp_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','projects-thp')
+
+
 
       # Set R/W mode only for admins
       admins=spawner.single_user_profiles.read_config_map('jupyterhub-groups','admins')
@@ -40,6 +44,12 @@
 
         pod.spec.volumes.append(dict(name='hmf-data-restricted-processed-ccso',persistentVolumeClaim=dict(claimName='hmf-data-restricted-processed-ccso')))
         pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-restricted-processed-ccso',mountPath='/opt/app-root/src/data/restricted/processed/ccso',readOnly=readOnly_flag))
+
+      if spawner.user.name in projects_thp_users:
+        pod.spec.volumes.append(dict(name='hmf-projects-thp',persistentVolumeClaim=dict(claimName='hmf-projects-thp')))
+        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-projects-thp',mountPath='/opt/app-root/src/projects/thp',readOnly=False))
+
+
 
       # Function modify_pod_hook must return the pod instance
       return pod
