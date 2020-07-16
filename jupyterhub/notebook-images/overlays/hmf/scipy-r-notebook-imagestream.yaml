@@ -9,10 +9,10 @@ spec:
     local: true
   tags:
   - annotations:
-      openshift.io/imported-from: quay.io/guimou/s2i-scipy-r-notebook
+      openshift.io/imported-from: quay.io/farbodab/s2i-scipy-r-notebook
     from:
       kind: DockerImage
-      name: quay.io/guimou/s2i-scipy-r-notebook:3.6
-    name: "3.6"
+      name: quay.io/farbodab/s2i-scipy-r-notebook:hmf
+    name: "hmf"
     referencePolicy:
       type: Source
