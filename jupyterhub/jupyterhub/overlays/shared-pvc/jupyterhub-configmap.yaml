@@ -13,8 +13,7 @@
       #Get Project Users
       projects_thp_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','projects-thp')
       projects_analytics_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','projects-analytics')
-
-
+      projects_pearl_users=spawner.single_user_profiles.read_config_map('jupyterhub-groups','projects-pearl')
 
 
       # Set R/W mode only for admins
@@ -54,6 +53,10 @@
       if spawner.user.name in projects_analytics_users:
         pod.spec.volumes.append(dict(name='hmf-projects-analytics',persistentVolumeClaim=dict(claimName='hmf-projects-analytics')))
         pod.spec.containers[0].volume_mounts.append(dict(name='hmf-projects-analytics',mountPath='/opt/app-root/src/projects/analytics',readOnly=False))
+
+      if spawner.user.name in projects_pearl_users:
+        pod.spec.volumes.append(dict(name='hmf-projects-pearl',persistentVolumeClaim=dict(claimName='hmf-projects-pearl')))
+        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-projects-pearl',mountPath='/opt/app-root/src/projects/pearl',readOnly=False))
 
 
       # Function modify_pod_hook must return the pod instance
