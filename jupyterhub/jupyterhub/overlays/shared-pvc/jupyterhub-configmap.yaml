@@ -50,8 +50,8 @@
         pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-restricted-processed-ccso',mountPath='/opt/app-root/src/data/restricted/processed/ccso',readOnly=readOnly_flag))
 
       if spawner.user.name in ices_users:
-        pod.spec.volumes.append(dict(name='hmf-data-restricted-raw-ices_users',persistentVolumeClaim=dict(claimName='hmf-data-restricted-raw-ices_users')))
-        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-restricted-raw-ices_users',mountPath='/opt/app-root/src/data/restricted/raw/ices_users',readOnly=readOnly_flag))
+        pod.spec.volumes.append(dict(name='hmf-data-restricted-raw-ices-users',persistentVolumeClaim=dict(claimName='hmf-data-restricted-raw-ices-users')))
+        pod.spec.containers[0].volume_mounts.append(dict(name='hmf-data-restricted-raw-ices-users',mountPath='/opt/app-root/src/data/restricted/raw/ices',readOnly=readOnly_flag))
         
       if spawner.user.name in projects_thp_users:
         pod.spec.volumes.append(dict(name='hmf-projects-thp',persistentVolumeClaim=dict(claimName='hmf-projects-thp')))
